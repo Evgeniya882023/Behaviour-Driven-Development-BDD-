@@ -23,18 +23,16 @@ class MoneyTransferTest {
     @BeforeEach
     void setup() {
         open("http:localhost:9999");
+        var loginPage = new LoginPage();
+        var authInfo = DataHelper.getAuthInfo();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        dashboardPage = verificationPage.validVerify(verificationCode);
+        firstCardInfo = DataHelper.getFirstCardInfo();
+        secondCardInfo = DataHelper.getSecondCardInfo();
+        balanceFirstCard = dashboardPage.getCardBalance(0);
+        balanceSecondCard = dashboardPage.getCardBalance(1);
     }
-        DashboardPage login() {
-            var loginPage = new LoginPage();
-            var authInfo = DataHelper.getAuthInfo();
-            var verificationPage = loginPage.validLogin(authInfo);
-            var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-            firstCardInfo = DataHelper.getFirstCardInfo();
-            secondCardInfo = DataHelper.getSecondCardInfo();
-            balanceFirstCard = dashboardPage.getCardBalance(0);
-            balanceSecondCard = dashboardPage.getCardBalance(1);
-            return verificationPage.validVerify(verificationCode);
-        }
 
     @Test
     void shouldTransferMoneyBetweenCards() {
